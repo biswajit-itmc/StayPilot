@@ -1,0 +1,275 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@theme inline {
+  --font-sans: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-heading: var(--font-sans);
+  --font-editorial: var(--font-playfair), Georgia, serif;
+
+  /* Brand */
+  --color-sage: var(--sage);
+  --color-mint: var(--mint);
+  --color-lime: var(--lime);
+  --color-charcoal: var(--charcoal);
+  --color-olive: var(--olive);
+  --color-olive-deep: var(--olive-deep);
+  --color-brown: var(--brown);
+  --color-brown-ink: var(--brown-ink);
+  --color-surface: var(--surface);
+  --color-border-strong: var(--border-strong);
+
+  /* Semantic (shadcn contract) */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
+  --radius-xl: 14px;
+  --radius-2xl: 16px;
+  --radius-3xl: 20px;
+  --radius-4xl: 24px;
+}
+
+/* StayPilot design tokens (light theme only) */
+:root {
+  /* Brand palette */
+  --sage: #b2c09b;
+  --mint: #aaebc8;
+  --lime: #cceb46;
+  --charcoal: #121311;
+  --muted-grey: #5b5e58;
+  --olive: #9fb73c;
+  /* Darkened olive for charts, bars and small UI: 4.8:1 on white, 4.4:1 on the page background (#9fb73c is 2.25:1) */
+  --olive-deep: #657a1d;
+  --brown: #9a6b53;
+  /* Darkened brown for small text: #9a6b53 is ~4.1:1 on white, this is ~6.5:1 */
+  --brown-ink: #7a503b;
+
+  /* Semantic */
+  --background: #f0f4f2;
+  --surface: #ffffff;
+  --foreground: #121311;
+  --card: #ffffff;
+  --card-foreground: #121311;
+  --popover: #ffffff;
+  --popover-foreground: #121311;
+  --primary: #121311;
+  --primary-foreground: #f0f4f2;
+  --secondary: #e4ebe6;
+  --secondary-foreground: #121311;
+  --muted: #e8eeea;
+  --muted-foreground: #5b5e58;
+  --accent: color-mix(in srgb, #aaebc8 35%, #ffffff);
+  --accent-foreground: #121311;
+  --destructive: #b4432f;
+  --border: #dde4df;
+  --border-strong: #c7d0ca;
+  --input: #868d87; /* form-field borders: 3.4:1 on white (was 1.5:1) */
+  --ring: #657a1d;
+  --chart-1: #121311;
+  --chart-2: #9fb73c;
+  --chart-3: #aaebc8;
+  --chart-4: #b2c09b;
+  --chart-5: #9a6b53;
+  --radius: 0.625rem;
+
+  --sidebar: #ffffff;
+  --sidebar-foreground: #121311;
+  --sidebar-primary: #121311;
+  --sidebar-primary-foreground: #f0f4f2;
+  --sidebar-accent: color-mix(in srgb, #aaebc8 35%, #ffffff);
+  --sidebar-accent-foreground: #121311;
+  --sidebar-border: #dde4df;
+  --sidebar-ring: #657a1d;
+
+  --shadow-card: 0 1px 2px rgb(18 19 17 / 0.04);
+  --shadow-pop: 0 8px 24px -6px rgb(18 19 17 / 0.14), 0 2px 6px rgb(18 19 17 / 0.06);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+  a:focus-visible,
+  :where(button, [role="button"], [role="combobox"], [role="menuitem"], [role="option"]):focus-visible,
+  summary:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 2px solid var(--charcoal);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+  ::selection {
+    background: var(--lime);
+    color: var(--charcoal);
+  }
+}
+
+@layer components {
+  .sidebar-scroll {
+    scrollbar-color: var(--border-strong) transparent;
+    scrollbar-width: thin;
+  }
+  .sidebar-scroll::-webkit-scrollbar {
+    width: 6px;
+  }
+  .sidebar-scroll::-webkit-scrollbar-thumb {
+    border-radius: 9999px;
+    background: var(--border-strong);
+  }
+  .table-scroll {
+    scrollbar-color: var(--border-strong) transparent;
+    scrollbar-width: thin;
+  }
+  .table-scroll::-webkit-scrollbar {
+    height: 6px;
+  }
+  .table-scroll::-webkit-scrollbar-thumb {
+    border-radius: 9999px;
+    background: var(--border-strong);
+  }
+}
+
+/* Typography scale: one place defines every text role. */
+@utility text-display {
+  font-family: var(--font-editorial);
+  font-size: 3.5rem;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  font-weight: 600;
+}
+@utility text-page-title {
+  font-size: 1.625rem;
+  line-height: 2rem;
+  letter-spacing: -0.02em;
+  font-weight: 600;
+}
+@utility text-section {
+  font-size: 1.0625rem;
+  line-height: 1.5rem;
+  letter-spacing: -0.01em;
+  font-weight: 600;
+}
+@utility text-card-title {
+  font-size: 0.9375rem;
+  line-height: 1.25rem;
+  font-weight: 600;
+}
+@utility text-body {
+  font-size: 0.875rem;
+  line-height: 1.375rem;
+  font-weight: 400;
+}
+@utility text-label {
+  font-size: 0.8125rem;
+  line-height: 1rem;
+  font-weight: 500;
+}
+@utility text-meta {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 400;
+  color: var(--muted-foreground);
+}
+@utility text-eyebrow {
+  font-size: 0.6875rem;
+  line-height: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+@utility text-nav {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+}
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+}
+@utility shadow-card {
+  box-shadow: var(--shadow-card);
+}
+@utility shadow-pop {
+  box-shadow: var(--shadow-pop);
+}
+
+/* Marketing-only type roles (landing page) */
+@utility text-hero {
+  font-family: var(--font-editorial);
+  font-size: clamp(2.75rem, 6.4vw, 5.5rem);
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  font-weight: 600;
+}
+@utility text-headline {
+  font-family: var(--font-editorial);
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  font-weight: 600;
+}
+@utility text-lead {
+  font-size: 1.125rem;
+  line-height: 1.65;
+  font-weight: 400;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+[id] {
+  scroll-margin-top: 5rem;
+}
+
+/* Reduced motion: framer-motion's server-rendered hidden state and any transform animation
+   (reveals, line drawing, floating) must never hide or move content. */
+@media (prefers-reduced-motion: reduce) {
+  [data-motion] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
