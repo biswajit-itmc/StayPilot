@@ -17,7 +17,7 @@ import { SimpleSelect } from "@/components/shared/simple-select";
 import { PaymentBadge, ReservationStatusBadge } from "@/components/shared/status-badges";
 import { useAppData, useIntent } from "@/hooks/use-app-data";
 import { roomLabel } from "@/data/rooms";
-import { TODAY_ISO, shift } from "@/lib/dates";
+import { TODAY_ISO, formatStayDate, formatStayTime, shift } from "@/lib/dates";
 import { cn } from "@/lib/utils";
 import { CancelDialog } from "./cancel-dialog";
 import { ReservationDetails } from "./reservation-details";
@@ -26,7 +26,7 @@ import { ReservationDialog } from "./reservation-dialog";
 const STATUS_TABS: (ReservationStatus | "all")[] = ["all", "Confirmed", "Pending", "Checked In", "Checked Out", "Cancelled"];
 const SOURCES = [{ value: "all", label: "All sources" }, ...["Direct", "Booking.com", "Airbnb", "Expedia", "Corporate"].map((s) => ({ value: s, label: s }))];
 const DATES = [
-  { value: "current", label: "Current and upcoming" },
+  { value: "current", label: "Upcoming and last 7 days" },
   { value: "today-in", label: "Arriving today" },
   { value: "today-out", label: "Departing today" },
   { value: "next7", label: "Check-in in the next 7 days" },
@@ -36,12 +36,17 @@ const DATES = [
   { value: "custom", label: "Custom check-in range" },
 ];
 const PAGE_SIZE = 15;
-const d = (s: string) => format(parseISO(s), "d MMM yyyy");
+const RECENT_DAYS = 7;
+const d = formatStayDate;
+const t = formatStayTime;
+const TH = "h-10 px-5 text-[11px]";
+const TD = "px-5 py-2.5";
 
 function inDates(r: Reservation, preset: string, from: string, to: string) {
   switch (preset) {
     case "current":
-      return r.checkOut >= TODAY_ISO;
+      // Stays that have not ended yet, plus those that ended within the last week, so recent Checked Out stays stay reachable.
+      return r.checkOut >= shift(TODAY_ISO, -RECENT_DAYS);
     case "today-in":
       return r.checkIn === TODAY_ISO;
     case "today-out":
@@ -166,7 +171,7 @@ export function ReservationsView() {
   );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       <PageHeader
         title="Reservations"
         description="Every booking across your properties. Search, filter and act on stays from one list."
@@ -177,7 +182,7 @@ export function ReservationsView() {
         }
       />
 
-      <div role="tablist" aria-label="Filter by status" className="-mx-1 flex gap-1 overflow-x-auto border-b border-border px-1">
+      <div role="tablist" aria-label="Filter by status" className="-mx-1 flex gap-0.5 overflow-x-auto border-b border-border px-1">
         {STATUS_TABS.map((s) => (
           <button
             key={s}
@@ -185,10 +190,10 @@ export function ReservationsView() {
             role="tab"
             aria-selected={status === s}
             onClick={() => filter(setStatus)(s)}
-            className={cn("-mb-px inline-flex shrink-0 items-center gap-2 border-b-2 px-3 py-2.5 text-label transition-colors", status === s ? "border-charcoal text-charcoal" : "border-transparent text-muted-foreground hover:text-charcoal")}
+            className={cn("-mb-px inline-flex shrink-0 items-center gap-1.5 border-b-2 px-2.5 py-2 text-[14px] font-medium leading-5 transition-colors", status === s ? "border-charcoal text-charcoal" : "border-transparent text-muted-foreground hover:text-charcoal")}
           >
             {s === "all" ? "All" : s}
-            <span className="tabular rounded bg-muted px-1.5 text-meta !text-charcoal">{counts[s]}</span>
+            <span className={cn("tabular rounded-full px-1.5 text-[11px] font-medium leading-[18px]", status === s ? "bg-muted !text-charcoal" : "bg-muted/60 !text-muted-foreground")}>{counts[s]}</span>
           </button>
         ))}
       </div>
@@ -203,7 +208,7 @@ export function ReservationsView() {
               onChange={(e) => filter(setQuery)(e.target.value)}
               placeholder="Search ID, guest, unit or email"
               aria-label="Search reservations by ID, guest, unit or email"
-              className="h-9 w-full rounded-lg border border-input bg-surface pl-9 pr-8 text-body outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/40 [&::-webkit-search-cancel-button]:hidden"
+              className="h-9.5 w-full rounded-lg border border-input bg-surface pl-9 pr-8 text-[13px] outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/40 [&::-webkit-search-cancel-button]:hidden"
             />
             {query && (
               <button type="button" onClick={() => filter(setQuery)("")} aria-label="Clear search" className="absolute right-2 top-1/2 grid size-5 -translate-y-1/2 place-items-center rounded text-muted-foreground hover:text-charcoal">
@@ -211,11 +216,11 @@ export function ReservationsView() {
               </button>
             )}
           </div>
-          <SimpleSelect label="Property" value={property} onChange={filter(setProperty)} className="w-full sm:w-48" options={[{ value: "all", label: "All properties" }, ...m.properties.map((p) => ({ value: p.id, label: p.name }))]} />
-          <SimpleSelect label="Booking source" value={source} onChange={filter(setSource)} className="w-full sm:w-40" options={SOURCES} />
-          <SimpleSelect label="Dates" value={datePreset} onChange={filter(setDatePreset)} className="w-full sm:w-60" options={DATES} />
+          <SimpleSelect label="Property" value={property} onChange={filter(setProperty)} className={"w-full sm:w-48"} options={[{ value: "all", label: "All properties" }, ...m.properties.map((p) => ({ value: p.id, label: p.name }))]} />
+          <SimpleSelect label="Booking source" value={source} onChange={filter(setSource)} className={"w-full sm:w-40"} options={SOURCES} />
+          <SimpleSelect label="Dates" value={datePreset} onChange={filter(setDatePreset)} className={"w-full sm:w-60"} options={DATES} />
           {filtersActive && (
-            <Button variant="ghost" size="sm" onClick={reset}>
+            <Button variant="ghost" onClick={reset} className="h-9.5">
               Clear filters
             </Button>
           )}
@@ -224,11 +229,11 @@ export function ReservationsView() {
           <div className="flex flex-wrap items-end gap-3">
             <label className="block w-[calc(50%-0.375rem)] sm:w-40">
               <span className="mb-1 block text-label">Check-in from</span>
-              <input type="date" value={from} onChange={(e) => filter(setFrom)(e.target.value)} className="h-9 w-full rounded-lg border border-input bg-surface px-2.5 text-body outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/40" aria-invalid={!!rangeError} />
+              <input type="date" value={from} onChange={(e) => filter(setFrom)(e.target.value)} className="h-9.5 w-full rounded-lg border border-input bg-surface px-2.5 text-[13px] outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/40" aria-invalid={!!rangeError} />
             </label>
             <label className="block w-[calc(50%-0.375rem)] sm:w-40">
               <span className="mb-1 block text-label">to</span>
-              <input type="date" value={to} onChange={(e) => filter(setTo)(e.target.value)} className="h-9 w-full rounded-lg border border-input bg-surface px-2.5 text-body outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/40" aria-invalid={!!rangeError} />
+              <input type="date" value={to} onChange={(e) => filter(setTo)(e.target.value)} className="h-9.5 w-full rounded-lg border border-input bg-surface px-2.5 text-[13px] outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/40" aria-invalid={!!rangeError} />
             </label>
             {rangeError && (
               <p role="alert" className="pb-2 text-body text-brown-ink">
@@ -239,7 +244,7 @@ export function ReservationsView() {
         )}
       </div>
 
-      <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-card">
+      <div className="overflow-hidden rounded-xl border border-border bg-surface">
         {rows.length === 0 ? (
           <EmptyState
             icon={CalendarSearch}
@@ -260,20 +265,19 @@ export function ReservationsView() {
         ) : (
           <>
             <Table>
-              <TableHeader>
+              <TableHeader className="bg-muted/40">
                 <TableRow className="hover:bg-transparent">
-                  <TableHead>Reservation</TableHead>
-                  <TableHead className="hidden md:table-cell">Property / unit</TableHead>
-                  <TableHead aria-sort={asc ? "ascending" : "descending"}>
+                  <TableHead className={TH}>Reservation</TableHead>
+                  <TableHead className={cn(TH, "hidden md:table-cell")}>Property / unit</TableHead>
+                  <TableHead className={TH} aria-sort={asc ? "ascending" : "descending"}>
                     <button type="button" onClick={() => setAsc((v) => !v)} className="inline-flex min-h-6 items-center gap-1 uppercase tracking-[0.08em] hover:text-charcoal" aria-label={`Sort by check-in, currently ${asc ? "earliest" : "latest"} first`}>
                       Check-in {asc ? <ArrowUp className="size-3" aria-hidden /> : <ArrowDown className="size-3" aria-hidden />}
                     </button>
                   </TableHead>
-                  <TableHead className="hidden xl:table-cell">Check-out</TableHead>
-                  <TableHead className="hidden min-[1400px]:table-cell">Source</TableHead>
-                  <TableHead className="hidden sm:table-cell">Status</TableHead>
-                  <TableHead className="hidden xl:table-cell">Payment</TableHead>
-                  <TableHead className="w-10">
+                  <TableHead className={cn(TH, "hidden sm:table-cell")}>Check-out</TableHead>
+                  <TableHead className={cn(TH, "hidden sm:table-cell")}>Status</TableHead>
+                  <TableHead className={cn(TH, "hidden xl:table-cell")}>Payment</TableHead>
+                  <TableHead className="h-10 w-12 px-2">
                     <span className="sr-only">Actions</span>
                   </TableHead>
                 </TableRow>
@@ -285,7 +289,7 @@ export function ReservationsView() {
                   const prop = m.by.property.get(r.propertyId)!;
                   return (
                     <TableRow key={r.id} className="cursor-pointer" onClick={() => setSelectedId(r.id)}>
-                      <TableCell>
+                      <TableCell className={TD}>
                         <button
                           type="button"
                           onClick={(e) => {
@@ -294,37 +298,46 @@ export function ReservationsView() {
                           }}
                           className="text-left"
                         >
-                          <span className="block text-label">{g.name}</span>
-                          <span className="block text-meta">
+                          <span className="block text-[13px] font-medium leading-5">{g.name}</span>
+                          <span className="block text-[12px] leading-4 text-muted-foreground">
                             {r.id}
                             <span className="md:hidden">
                               {" · "}
                               {roomLabel(room)}
                             </span>
+                            <span aria-hidden className="text-border-strong">
+                              {" · "}
+                            </span>
+                            {r.source || "Source unavailable"}
                           </span>
-                          <span className="mt-1 block sm:hidden">
-                            <ReservationStatusBadge status={r.status} />
+                          <span className="mt-1.5 block sm:hidden">
+                            <ReservationStatusBadge status={r.status} subtle />
                           </span>
                         </button>
                       </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        <span className="block text-body">{roomLabel(room)}</span>
-                        <span className="block text-meta">{prop.name}</span>
+                      <TableCell className={cn(TD, "hidden md:table-cell")}>
+                        <span className="block text-[13px] leading-5">{roomLabel(room)}</span>
+                        <span className="block text-[12px] leading-4 text-muted-foreground">{prop.name}</span>
                       </TableCell>
-                      <TableCell className="tabular">
-                        <span className="sm:hidden">{format(parseISO(r.checkIn), "d MMM")}</span>
-                        <span className="hidden sm:inline">{d(r.checkIn)}</span>
-                        <span className="hidden text-meta sm:block xl:hidden">to {d(r.checkOut)}</span>
+                      <TableCell className={cn(TD, "tabular")}>
+                        <span className="block text-[13px] font-medium leading-5">
+                          <span className="sm:hidden">{format(parseISO(r.checkIn), "d MMM")}</span>
+                          <span className="hidden sm:inline">{d(r.checkIn)}</span>
+                        </span>
+                        {t(r.checkInTime) && <span className="block text-[12px] leading-4 text-muted-foreground">{t(r.checkInTime)}</span>}
+                        <span className="block text-[12px] leading-4 text-muted-foreground sm:hidden">to {format(parseISO(r.checkOut), "d MMM")}</span>
                       </TableCell>
-                      <TableCell className="tabular hidden xl:table-cell">{d(r.checkOut)}</TableCell>
-                      <TableCell className="hidden text-muted-foreground min-[1400px]:table-cell">{r.source}</TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        <ReservationStatusBadge status={r.status} />
+                      <TableCell className={cn(TD, "tabular hidden sm:table-cell")}>
+                        <span className="block text-[13px] font-medium leading-5">{d(r.checkOut)}</span>
+                        {t(r.checkOutTime) && <span className="block text-[12px] leading-4 text-muted-foreground">{t(r.checkOutTime)}</span>}
                       </TableCell>
-                      <TableCell className="hidden xl:table-cell">
+                      <TableCell className={cn(TD, "hidden sm:table-cell")}>
+                        <ReservationStatusBadge status={r.status} subtle />
+                      </TableCell>
+                      <TableCell className={cn(TD, "hidden xl:table-cell")}>
                         <PaymentBadge status={r.paymentStatus} />
                       </TableCell>
-                      <TableCell className="pl-0" onClick={(e) => e.stopPropagation()}>
+                      <TableCell className="py-3 pl-0 pr-3" onClick={(e) => e.stopPropagation()}>
                         {menu(r)}
                       </TableCell>
                     </TableRow>

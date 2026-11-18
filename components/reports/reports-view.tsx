@@ -150,8 +150,8 @@ export function ReportsView() {
         <div className="w-full sm:w-48"><span className="mb-1.5 block text-label">Date range</span><SimpleSelect label="Date range" value={range} onChange={setRange} options={RANGE_OPTIONS} /></div>
         <div className="w-full sm:w-64"><span className="mb-1.5 block text-label">Property</span><SimpleSelect label="Property" value={propertyId} onChange={setPropertyId} options={propertyOptions} /></div>
         {range === "custom" && <>
-          <label className="w-[calc(50%-0.375rem)] sm:w-40"><span className="mb-1.5 block text-label">From</span><input aria-label="Date range from" type="date" value={customFrom} onChange={(event) => setCustomFrom(event.target.value)} className="h-9 w-full rounded-lg border border-input bg-surface px-3 text-body" /></label>
-          <label className="w-[calc(50%-0.375rem)] sm:w-40"><span className="mb-1.5 block text-label">To</span><input aria-label="Date range to" type="date" value={customTo} onChange={(event) => setCustomTo(event.target.value)} className="h-9 w-full rounded-lg border border-input bg-surface px-3 text-body" /></label>
+          <label className="w-[calc(50%-0.375rem)] sm:w-40"><span className="mb-1.5 block text-label">From</span><input aria-label="Date range from" type="date" value={customFrom} onChange={(event) => setCustomFrom(event.target.value)} className="h-9.5 w-full rounded-lg border border-input bg-surface px-3 text-body" /></label>
+          <label className="w-[calc(50%-0.375rem)] sm:w-40"><span className="mb-1.5 block text-label">To</span><input aria-label="Date range to" type="date" value={customTo} onChange={(event) => setCustomTo(event.target.value)} className="h-9.5 w-full rounded-lg border border-input bg-surface px-3 text-body" /></label>
         </>}
         {invalidRange && <p role="alert" className="text-body text-brown-ink">Start date must be on or before end date.</p>}
         <p className="ml-auto text-meta">Showing {from} through {to}</p>

@@ -5,7 +5,7 @@ import { format, parseISO } from "date-fns";
 import type { Reservation, Room } from "@/types";
 import { ReservationStatusBadge } from "@/components/shared/status-badges";
 import { roomLabel } from "@/data/rooms";
-import { TODAY_ISO } from "@/lib/dates";
+import { TODAY_ISO, formatStayTime } from "@/lib/dates";
 import { accessStatusFor, isLive, nightsOf, occupiesNight, type Model } from "@/lib/model";
 import { cn } from "@/lib/utils";
 
@@ -29,7 +29,7 @@ function Item({ m, r, time, onSelect, showAccess }: { m: Model; r: Reservation; 
   return (
     <li>
       <button type="button" onClick={() => onSelect(r.id)} className="flex w-full items-center gap-3 px-4 py-2.5 text-left hover:bg-accent/40">
-        <span className="tabular w-12 shrink-0 text-label">{time}</span>
+        <span className="tabular w-[4.5rem] shrink-0 text-label">{time}</span>
         <span className="min-w-0 flex-1">
           <span className="block truncate text-label">{guest?.name}</span>
           <span className="block truncate text-meta">
@@ -76,7 +76,7 @@ export function DayBoard({ m, date, rooms, showCancelled, onSelect, onCreate }: 
       <div className="grid gap-5 xl:grid-cols-3">
         <Column title="Arrivals" icon={ArrowDownToLine} count={arrivals.length} empty="No arrivals on this day.">
           {arrivals.map((r) => (
-            <Item key={r.id} m={m} r={r} time={r.checkInTime} onSelect={onSelect} showAccess={!past} />
+            <Item key={r.id} m={m} r={r} time={formatStayTime(r.checkInTime) ?? "—"} onSelect={onSelect} showAccess={!past} />
           ))}
         </Column>
         <Column title="Staying over" icon={BedDouble} count={stayovers.length} empty="Nobody is staying over.">
@@ -86,7 +86,7 @@ export function DayBoard({ m, date, rooms, showCancelled, onSelect, onCreate }: 
         </Column>
         <Column title="Departures" icon={ArrowUpFromLine} count={departures.length} empty="No departures on this day.">
           {departures.map((r) => (
-            <Item key={r.id} m={m} r={r} time={r.checkOutTime} onSelect={onSelect} />
+            <Item key={r.id} m={m} r={r} time={formatStayTime(r.checkOutTime) ?? "—"} onSelect={onSelect} />
           ))}
         </Column>
       </div>

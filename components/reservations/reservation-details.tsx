@@ -8,10 +8,9 @@ import { Sheet, SheetContent, SheetDescription, SheetTitle } from "@/components/
 import { PaymentBadge, ReservationStatusBadge } from "@/components/shared/status-badges";
 import { useAppData } from "@/hooks/use-app-data";
 import { roomLabel } from "@/data/rooms";
-import { TODAY_ISO } from "@/lib/dates";
+import { TODAY_ISO, formatStayDate, formatStayTime } from "@/lib/dates";
 import { accessStatusFor, nightsOf } from "@/lib/model";
 
-const d = (s: string) => format(parseISO(s), "EEE d MMM yyyy");
 
 export function ReservationDetails({
   reservation,
@@ -43,8 +42,8 @@ export function ReservationDetails({
     ? [
         { at: r.createdAt, text: `Booked via ${r.source}` },
         r.instructionsSent && r.status !== "Cancelled" ? { at: r.checkIn, text: "Check-in instructions sent" } : null,
-        r.status === "Checked In" || r.status === "Checked Out" ? { at: r.checkIn, text: `Checked in at ${r.checkInTime}` } : null,
-        r.status === "Checked Out" ? { at: r.checkOut, text: `Checked out at ${r.checkOutTime}` } : null,
+        r.status === "Checked In" || r.status === "Checked Out" ? { at: r.checkIn, text: `Checked in${formatStayTime(r.checkInTime) ? ` at ${formatStayTime(r.checkInTime)}` : ""}` } : null,
+        r.status === "Checked Out" ? { at: r.checkOut, text: `Checked out${formatStayTime(r.checkOutTime) ? ` at ${formatStayTime(r.checkOutTime)}` : ""}` } : null,
         r.cancelledAt ? { at: r.cancelledAt, text: "Cancelled" } : null,
       ].filter(Boolean) as { at: string; text: string }[]
     : [];
@@ -86,8 +85,8 @@ export function ReservationDetails({
 
             <dl className="grid grid-cols-2 gap-x-6 gap-y-4">
               {[
-                ["Check-in", `${d(r.checkIn)} · ${r.checkInTime}`],
-                ["Check-out", `${d(r.checkOut)} · ${r.checkOutTime}`],
+                ["Check-in", [formatStayDate(r.checkIn), formatStayTime(r.checkInTime)].filter(Boolean).join(" · ")],
+                ["Check-out", [formatStayDate(r.checkOut), formatStayTime(r.checkOutTime)].filter(Boolean).join(" · ")],
                 ["Guests", `${r.adults}`],
                 ["Source", r.source],
               ].map(([k, v]) => (

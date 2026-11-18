@@ -72,7 +72,7 @@ export function AutomationView() {
           <TableHeader><TableRow className="hover:bg-transparent"><TableHead>Rule</TableHead><TableHead className="hidden lg:table-cell">Trigger / conditions</TableHead><TableHead className="hidden xl:table-cell">Action</TableHead><TableHead>Status</TableHead><TableHead className="hidden md:table-cell">Last executed</TableHead><TableHead className="w-40">Actions</TableHead></TableRow></TableHeader>
           <TableBody>{rules.map((rule) => <TableRow key={rule.id} className="cursor-pointer" onClick={() => setSelected(rule)}>
             <TableCell><button type="button" className="flex items-start gap-2 text-left"><Workflow className="mt-0.5 size-4 shrink-0 text-muted-foreground" /><span><span className="block text-label">{rule.name}</span><span className="text-meta">{rule.id}</span></span></button></TableCell>
-            <TableCell className="hidden max-w-64 lg:table-cell"><span className="block text-body">{rule.trigger}</span><span className="block truncate text-meta">{rule.conditions}</span></TableCell>
+            <TableCell className="hidden max-w-64 whitespace-normal lg:table-cell"><span className="block text-body">{rule.trigger}</span><span className="block truncate text-meta">{rule.conditions}</span></TableCell>
             <TableCell className="hidden max-w-64 truncate text-body xl:table-cell">{rule.action}</TableCell>
             <TableCell><StatePill value={rule.enabled ? "Active" : "Disabled"} /></TableCell>
             <TableCell className="hidden text-body md:table-cell">{rule.lastExecuted}</TableCell>

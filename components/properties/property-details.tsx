@@ -8,7 +8,7 @@ import { Sheet, SheetContent, SheetDescription, SheetTitle } from "@/components/
 import { PropertyStatusBadge, RoomStateBadge } from "@/components/shared/status-badges";
 import { useAppData } from "@/hooks/use-app-data";
 import { roomLabel } from "@/data/rooms";
-import { TODAY_ISO } from "@/lib/dates";
+import { TODAY_ISO, formatStayTime } from "@/lib/dates";
 import { isLive, propertyStats, roomState, unitName } from "@/lib/model";
 import { format, parseISO } from "date-fns";
 
@@ -153,7 +153,7 @@ export function PropertyDetails({
                           <span className="block truncate text-label">{m.by.guest.get(r.guestId)?.name}</span>
                           <span className="text-meta">{unitName(m, r.roomId)}</span>
                         </span>
-                        <span className="tabular shrink-0 text-meta">{format(parseISO(r.checkIn), "d MMM")} · {r.checkInTime}</span>
+                        <span className="tabular shrink-0 text-meta">{format(parseISO(r.checkIn), "d MMM")} · {formatStayTime(r.checkInTime) ?? "—"}</span>
                       </li>
                     ))}
                   </ul>

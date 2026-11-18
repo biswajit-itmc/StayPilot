@@ -109,7 +109,7 @@ export function UsersView() {
           <TableBody>{visible.map((user) => <TableRow key={user.id}>
             <TableCell><div className="flex items-start gap-2"><UserRoundCog className="mt-0.5 size-4 shrink-0 text-muted-foreground" /><span className="min-w-0"><span className="block text-label">{user.name}</span><span className="block max-w-48 truncate text-meta">{user.email}</span><span className="text-meta lg:hidden">{assignedNames(user).join(", ") || "No property assigned"}</span></span></div></TableCell>
             <TableCell><StatePill value={user.role} /></TableCell>
-            <TableCell className="max-w-64 text-body hidden lg:table-cell">{assignedNames(user).join(", ") || "All properties"}</TableCell>
+            <TableCell className="hidden min-w-48 max-w-64 whitespace-normal text-body lg:table-cell">{assignedNames(user).join(", ") || "All properties"}</TableCell>
             <TableCell><StatePill value={user.status} /></TableCell>
             <TableCell className="hidden text-body md:table-cell">{user.lastActive}</TableCell>
             <TableCell><div className="flex items-center gap-1"><Button variant="ghost" size="sm" onClick={() => openEdit(user)}>Edit</Button><Button variant="ghost" size="sm" onClick={() => changeStatus(user)}>{user.status === "Active" ? "Deactivate" : "Activate"}</Button></div></TableCell>
@@ -124,7 +124,7 @@ export function UsersView() {
           <form onSubmit={saveUser} className="space-y-4">
             <label className="block space-y-1.5"><span className="text-label">Name</span><Input value={draft.name} onChange={(event) => setDraft((current) => ({ ...current, name: event.target.value }))} autoComplete="name" required /></label>
             <label className="block space-y-1.5"><span className="text-label">Email</span><Input type="email" value={draft.email} onChange={(event) => setDraft((current) => ({ ...current, email: event.target.value }))} autoComplete="email" required /></label>
-            <label className="block space-y-1.5"><span className="text-label">Role</span><select className="h-9 w-full rounded-lg border border-input bg-surface px-3 text-body" value={draft.role} onChange={(event) => {
+            <label className="block space-y-1.5"><span className="text-label">Role</span><select className="h-9.5 w-full rounded-lg border border-input bg-surface px-3 text-body" value={draft.role} onChange={(event) => {
               const role = STAFF_ROLES.find((item) => item === event.target.value);
               if (role) setDraft((current) => ({ ...current, role }));
             }}>{STAFF_ROLES.map((role) => <option key={role} value={role}>{role}</option>)}</select></label>

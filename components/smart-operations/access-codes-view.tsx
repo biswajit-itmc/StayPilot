@@ -202,7 +202,7 @@ export function AccessCodesView() {
         <DialogContent className="sm:max-w-lg">
           <DialogHeader><DialogTitle>{dialog === "edit" ? "Edit validity window" : "Create access task"}</DialogTitle><DialogDescription>Simulation only. This creates a local task record with a fictional masked code; it does not generate a credential or contact a lock.</DialogDescription></DialogHeader>
           <form onSubmit={updateDates} className="space-y-4">
-            {dialog === "create" && <label className="block space-y-1.5"><span className="text-label">Reservation</span><select className="h-9 w-full rounded-lg border border-input bg-surface px-3 text-body" value={reservationId} onChange={(event) => {
+            {dialog === "create" && <label className="block space-y-1.5"><span className="text-label">Reservation</span><select className="h-9.5 w-full rounded-lg border border-input bg-surface px-3 text-body" value={reservationId} onChange={(event) => {
               const next = m.by.reservation.get(event.target.value);
               setReservationId(event.target.value);
               if (next) { setValidFrom(`${next.checkIn}T${next.checkInTime}`); setValidUntil(`${next.checkOut}T${next.checkOutTime}`); }

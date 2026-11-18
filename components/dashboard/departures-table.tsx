@@ -6,7 +6,7 @@ import type { Reservation } from "@/types";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { daysBetween } from "@/lib/dates";
+import { daysBetween, formatStayTime } from "@/lib/dates";
 import { describe } from "@/lib/dashboard";
 import type { Model } from "@/lib/model";
 import { SectionHeader, StatusText } from "./section";
@@ -79,7 +79,7 @@ export function DeparturesTable({ m, rows, total, onCheckOut, onLateCheckout, on
                     <p className="text-meta">{d.property.name}</p>
                   </TableCell>
                   <TableCell>
-                    <span className="tabular">{r.checkOutTime}</span>
+                    <span className="tabular">{formatStayTime(r.checkOutTime) ?? "—"}</span>
                   </TableCell>
                   <TableCell className="tabular hidden text-muted-foreground md:table-cell">{daysBetween(r.checkIn, r.checkOut)} nights</TableCell>
                   <TableCell>{out ? <StatusText tone="ok">Checked out</StatusText> : <StatusText tone="neutral">Due out</StatusText>}</TableCell>

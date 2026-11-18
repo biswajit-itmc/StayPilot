@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { formatStayTime } from "@/lib/dates";
 import { MoreHorizontal, Star } from "lucide-react";
 import type { AccessStatus, Reservation } from "@/types";
 import { Button } from "@/components/ui/button";
@@ -99,7 +100,7 @@ export function ArrivalsTable({ m, rows, total, onCheckIn, onSendInstructions, o
                     {isIn ? (
                       <StatusText tone="ok">Checked in</StatusText>
                     ) : (
-                      <span className="tabular">{r.checkInTime}</span>
+                      <span className="tabular">{formatStayTime(r.checkInTime) ?? "—"}</span>
                     )}
                   </TableCell>
                   <TableCell className="hidden text-muted-foreground min-[1600px]:table-cell">{r.source}</TableCell>

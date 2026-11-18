@@ -11,8 +11,16 @@ const reservation: Record<ReservationStatus, string> = {
   Cancelled: "bg-brown/12 text-brown-ink line-through decoration-brown-ink/60",
 };
 
-export function ReservationStatusBadge({ status, className }: { status: ReservationStatus; className?: string }) {
-  return <span className={cn(base, reservation[status], className)}>{status}</span>;
+/** Restrained palette for dense lists: the strong charcoal "Checked In" becomes a soft mint tint. */
+const reservationSubtle: Record<ReservationStatus, string> = {
+  ...reservation,
+  "Checked In": "bg-mint/55 text-charcoal",
+};
+
+export function ReservationStatusBadge({ status, className, subtle }: { status: ReservationStatus; className?: string; subtle?: boolean }) {
+  return (
+    <span className={cn(base, (subtle ? reservationSubtle : reservation)[status], subtle && "h-[22px] px-2 text-[12px] leading-none", className)}>{status}</span>
+  );
 }
 
 const payment: Record<PaymentStatus, string> = {

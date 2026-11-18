@@ -30,7 +30,7 @@ type Props = {
 };
 
 const dateInput =
-  "h-9 w-full rounded-lg border border-input bg-surface px-2.5 text-body outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/40";
+  "h-9.5 w-full rounded-lg border border-input bg-surface px-2.5 text-body outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/40";
 
 export function DashboardFilters({ properties, property, onProperty, preset, onPreset, custom, onCustom, rangeError, query, onQuery }: Props) {
   const propertyItems = [{ value: "all", label: "All properties" }, ...properties.map((p) => ({ value: p.id, label: p.name }))];
@@ -71,7 +71,7 @@ export function DashboardFilters({ properties, property, onProperty, preset, onP
             onChange={(e) => onQuery(e.target.value)}
             placeholder="Filter by guest or room"
             aria-label="Filter arrivals and departures by guest, room or booking"
-            className="h-9 w-full rounded-lg border border-input bg-surface pl-9 pr-8 text-body outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/40 [&::-webkit-search-cancel-button]:hidden"
+            className="h-9.5 w-full rounded-lg border border-input bg-surface pl-9 pr-8 text-body outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/40 [&::-webkit-search-cancel-button]:hidden"
           />
           {query && (
             <button

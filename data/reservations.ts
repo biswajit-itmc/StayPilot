@@ -140,7 +140,3 @@ for (const r of reservations) {
   if (!seen || r.createdAt < seen) firstBooked.set(r.guestId, r.createdAt);
 }
 for (const g of guests) g.createdAt = firstBooked.get(g.id) ?? shift(TODAY_ISO, -400 - (Number(g.id.slice(4)) % 200));
-
-/** Overlaps the night of `date` (check-in <= date < check-out), excluding cancellations. */
-export const occupiesNight = (r: Reservation, date: string) =>
-  r.status !== "Cancelled" && r.checkIn <= date && date < r.checkOut;

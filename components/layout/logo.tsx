@@ -1,27 +1,23 @@
+import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { brand } from "@/lib/brand";
 
+/** Official StayPilot artwork (public/brand). The emblem and wordmark are cut from the supplied logo, never redrawn. */
+const EMBLEM = { src: "/brand/staypilot-emblem.png", width: 480, height: 484 };
+const WORDMARK = { src: "/brand/staypilot-wordmark.png", width: 960, height: 155 };
+
+/** Emblem only: collapsed sidebar, loading screens. */
 export function LogoMark({ className }: { className?: string }) {
-  return (
-    <span
-      aria-hidden
-      className={cn("grid size-8 place-items-center rounded-lg bg-charcoal text-lime", className)}
-    >
-      <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M3 11.5 12 4l9 7.5" />
-        <path d="M6 10.5V20h12v-9.5" />
-        <path d="M10 20v-5h4v5" />
-      </svg>
-    </span>
-  );
+  return <Image {...EMBLEM} alt="" aria-hidden unoptimized priority className={cn("h-9 w-auto shrink-0", className)} />;
 }
 
+/** Emblem + wordmark, horizontally aligned. */
 export function Logo({ href = "/", className }: { href?: string; className?: string }) {
   return (
-    <Link href={href} className={cn("inline-flex items-center gap-2.5", className)}>
+    <Link href={href} aria-label={brand.name} className={cn("inline-flex items-center gap-2.5", className)}>
       <LogoMark />
-      <span className="text-section">{brand.name}</span>
+      <Image {...WORDMARK} alt="" aria-hidden unoptimized priority className="h-5 w-auto" />
     </Link>
   );
 }

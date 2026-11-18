@@ -16,7 +16,7 @@ export function OccupancyOverview({ breakdown, perProperty, pct }: { breakdown: 
     <section>
       <SectionHeader title="Occupancy tonight" meta={`${breakdown.sellable} sellable of ${breakdown.total} units`} />
 
-      <p className="tabular mt-5 text-[2.5rem] font-semibold leading-none tracking-tight">
+      <p className="tabular mt-5 text-[2rem] font-semibold leading-none tracking-tight">
         {pct}
         <span className="text-section text-muted-foreground">%</span>
       </p>

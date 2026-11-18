@@ -16,7 +16,7 @@ export function SectionHeader({
     <div className={cn("flex items-end justify-between gap-4", className)}>
       <div className="min-w-0">
         <h2 className="text-section">{title}</h2>
-        {meta && <p className="mt-0.5 text-body text-muted-foreground">{meta}</p>}
+        {meta && <p className="mt-0.5 text-[13px] text-muted-foreground">{meta}</p>}
       </div>
       {action && <div className="flex shrink-0 items-center gap-2">{action}</div>}
     </div>
@@ -34,7 +34,7 @@ const dot: Record<Tone, string> = {
 /** Small coloured dot + text. Colour is never the only signal: the label always carries the state. */
 export function StatusText({ tone, children, className }: { tone: Tone; children: React.ReactNode; className?: string }) {
   return (
-    <span className={cn("inline-flex items-center gap-1.5 whitespace-nowrap text-body", className)}>
+    <span className={cn("inline-flex items-center gap-1.5 whitespace-nowrap text-[13px]", className)}>
       <span aria-hidden className={cn("size-2 shrink-0 rounded-full", dot[tone])} />
       {children}
     </span>

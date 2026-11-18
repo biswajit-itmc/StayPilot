@@ -50,8 +50,8 @@ export function MetricsStrip({ m, filtered }: { m: Metrics; filtered: boolean })
   return (
     <dl className="grid grid-cols-2 divide-border rounded-xl border border-border bg-surface sm:grid-cols-3 xl:grid-cols-5 xl:divide-x [&>div]:border-b [&>div]:border-border xl:[&>div]:border-b-0">
       {cells.map((c) => (
-        <div key={c.label} className="relative px-4 py-4 last:col-span-2 sm:last:col-span-1 sm:px-5">
-          <dt className="text-label uppercase tracking-wide text-muted-foreground">{c.label}</dt>
+        <div key={c.label} className="relative px-4 py-3.5 last:col-span-2 sm:last:col-span-1 sm:px-5">
+          <dt className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">{c.label}</dt>
           <dd className="tabular mt-1.5 text-[1.75rem] font-semibold leading-8 tracking-tight">{c.value}</dd>
           <dd className="mt-1 text-meta">{c.foot}</dd>
           {"bar" in c && (

@@ -11,23 +11,6 @@ import { cn } from "@/lib/utils";
 
 type Result = { key: string; group: string; title: string; detail?: string; href: string; icon: typeof Search; intent?: Intent };
 
-export function GlobalSearchButton({ onOpen, className }: { onOpen: () => void; className?: string }) {
-  return (
-    <button
-      type="button"
-      onClick={onOpen}
-      className={cn(
-        "flex h-9 w-full items-center gap-2 rounded-lg border border-border-strong/80 bg-surface px-2.5 text-body text-muted-foreground outline-none transition-colors hover:border-border-strong focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/40",
-        className
-      )}
-    >
-      <Search className="size-4" />
-      <span className="min-w-0 flex-1 truncate text-left">Search guests, reservations, properties…</span>
-      <kbd className="shrink-0 rounded-md border border-border bg-background px-1.5 py-0.5 text-[11px] text-muted-foreground">Ctrl K</kbd>
-    </button>
-  );
-}
-
 export function GlobalSearch({ open, onOpenChange }: { open: boolean; onOpenChange: (o: boolean) => void }) {
   const router = useRouter();
   const { model: m, openIntent } = useAppData();
@@ -122,7 +105,7 @@ export function GlobalSearch({ open, onOpenChange }: { open: boolean; onOpenChan
             }}
             placeholder="Search guests, reservations, properties…"
             aria-label="Search"
-            className="h-12 w-full bg-transparent text-body outline-none placeholder:text-muted-foreground"
+            className="h-11 w-full bg-transparent text-[14px] outline-none placeholder:text-muted-foreground"
           />
         </div>
         <div className="max-h-[360px] overflow-y-auto p-2">
