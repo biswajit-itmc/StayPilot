@@ -183,7 +183,7 @@ export function GuestsView() {
                             <span className="tabular text-body">{s.inHouse ? "In house" : s.upcoming ? `${short(s.upcoming.checkIn)}` : "–"}</span>
                             {s.upcoming && !s.inHouse && <span className="block truncate text-meta">{roomLabel(m.by.room.get(s.upcoming.roomId)!)}</span>}
                           </span>
-                          <span className="shrink-0">
+                          <span className="flex w-24 shrink-0 justify-end">
                             <GuestStatusBadge status={g.status} />
                           </span>
                         </button>
